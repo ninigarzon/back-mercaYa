@@ -25,4 +25,11 @@ Route::group([
     Route::post('logout', [\App\Http\Controllers\Api\AuthController::class, 'logout'])->name('logout');
     Route::post('refresh', [\App\Http\Controllers\Api\AuthController::class, 'refresh'])->name('refresh');
     Route::post('me', [\App\Http\Controllers\Api\AuthController::class, 'me'])->name('me');
+    Route::group(['prefix' => '/mark'], function($router) {
+        Route::post('create', [\App\Http\Controllers\Api\MarkController::class, 'newMark']);
+        Route::get('list/{userId}', [\App\Http\Controllers\Api\MarkController::class, 'getListMark']);
+        Route::get('get/{id}', [\App\Http\Controllers\Api\MarkController::class, 'getMark']);
+        Route::put('edit/{id}', [\App\Http\Controllers\Api\MarkController::class, 'editMark']);
+        Route::delete('delete/{id}', [\App\Http\Controllers\Api\MarkController::class, 'deleteMark']);
+    });
 });
