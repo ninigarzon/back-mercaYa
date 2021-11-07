@@ -32,4 +32,12 @@ Route::group([
         Route::put('edit/{id}', [\App\Http\Controllers\Api\MarkController::class, 'editMark']);
         Route::delete('delete/{id}', [\App\Http\Controllers\Api\MarkController::class, 'deleteMark']);
     });
+    Route::group(['prefix' => '/product'], function($router) {
+        Route::post('/', [\App\Http\Controllers\Api\ProductController::class, 'store']);
+        Route::get('/list/{userId}', [\App\Http\Controllers\Api\ProductController::class, 'getList']);
+        Route::get('/{userId}', [\App\Http\Controllers\Api\ProductController::class, 'index']);
+        Route::put('/{userId}', [\App\Http\Controllers\Api\ProductController::class, 'update']);
+        Route::delete('/{userId}', [\App\Http\Controllers\Api\ProductController::class, 'delete']);
+    });
+    
 });
