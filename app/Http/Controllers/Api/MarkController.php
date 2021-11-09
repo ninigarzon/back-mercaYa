@@ -20,6 +20,8 @@ class MarkController extends Controller
             $validateData = Validator::make($request->all(),[
                 'user_id' => 'required|integer|exists:users,id',
                 'name'    => 'required|string',
+                'supermarket' => 'required|string',
+                'category' => 'required|string'
             ]);
             if ($validateData->fails()) {
                 return response()->json($validateData->errors(), 403);
@@ -29,7 +31,8 @@ class MarkController extends Controller
                 $newMark->$value = $request[$value];
             }
             $newMark->save();
-            return response()->json(['message' => 'create value'], 201);
+            return response()->json(
+                ['message' => 'Success operation', 'data' => $newMark], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 401);
         }
@@ -45,7 +48,7 @@ class MarkController extends Controller
                 return response()->json($validateData->errors(), 403);
             }
             $list = Mark::where('user_id', '=', $userId)->get();
-            return response()->json(['data' => $list], 201);
+            return response()->json(['message' => 'Success operation', 'data' => $list], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 401);
         }
@@ -61,7 +64,7 @@ class MarkController extends Controller
                 return response()->json($validateData->errors(), 403);
             }
             $mark = Mark::find($id)->first();
-            return response()->json(['data' => $mark], 201);
+            return response()->json(['message' => 'Success operation', 'data' => $mark], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 401);
         }
@@ -71,13 +74,16 @@ class MarkController extends Controller
     {
         try {
             $validateData = Validator::make($request->all(), [
-                'name' => 'required|string'
+                'name'    => 'required|string',
+                'supermarket' => 'required|string',
+                'category' => 'required|string'
             ]);
             if ($validateData->fails()) {
                 return response()->json($validateData->errors(), 403);
             }
-            Mark::where('id', '=', $id)->update(['name' => $request['name']]);
-            return response()->json(['message' => 'update value'], 201);
+            Mark::where('id', '=', $id)->update($request->all());
+            $mark = Mark::findOrFail($id);
+            return response()->json(['message' => 'Success operation', 'data' => $mark], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 401);
         }
@@ -93,7 +99,7 @@ class MarkController extends Controller
                 return response()->json($validateData->errors(), 403);
             }
             Mark::where('id', '=', $id)->delete();
-            return response()->json(['message' => 'delete value'], 201);
+            return response()->json(['message' => 'Success operation', 'data' => 'OK'], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 401);
         }

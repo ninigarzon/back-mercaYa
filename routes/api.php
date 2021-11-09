@@ -26,18 +26,24 @@ Route::group([
     Route::post('refresh', [\App\Http\Controllers\Api\AuthController::class, 'refresh'])->name('refresh');
     Route::post('me', [\App\Http\Controllers\Api\AuthController::class, 'me'])->name('me');
     Route::group(['prefix' => '/mark'], function($router) {
-        Route::post('create', [\App\Http\Controllers\Api\MarkController::class, 'newMark']);
+        Route::post('/', [\App\Http\Controllers\Api\MarkController::class, 'newMark']);
         Route::get('list/{userId}', [\App\Http\Controllers\Api\MarkController::class, 'getListMark']);
-        Route::get('get/{id}', [\App\Http\Controllers\Api\MarkController::class, 'getMark']);
-        Route::put('edit/{id}', [\App\Http\Controllers\Api\MarkController::class, 'editMark']);
-        Route::delete('delete/{id}', [\App\Http\Controllers\Api\MarkController::class, 'deleteMark']);
+        Route::get('{id}', [\App\Http\Controllers\Api\MarkController::class, 'getMark']);
+        Route::put('{id}', [\App\Http\Controllers\Api\MarkController::class, 'editMark']);
+        Route::delete('{id}', [\App\Http\Controllers\Api\MarkController::class, 'deleteMark']);
     });
     Route::group(['prefix' => '/product'], function($router) {
         Route::post('/', [\App\Http\Controllers\Api\ProductController::class, 'store']);
         Route::get('/list/{userId}', [\App\Http\Controllers\Api\ProductController::class, 'getList']);
-        Route::get('/{userId}', [\App\Http\Controllers\Api\ProductController::class, 'index']);
-        Route::put('/{userId}', [\App\Http\Controllers\Api\ProductController::class, 'update']);
-        Route::delete('/{userId}', [\App\Http\Controllers\Api\ProductController::class, 'delete']);
+        Route::get('/{id}', [\App\Http\Controllers\Api\ProductController::class, 'index']);
+        Route::put('/{id}', [\App\Http\Controllers\Api\ProductController::class, 'update']);
+        Route::delete('/{id}', [\App\Http\Controllers\Api\ProductController::class, 'delete']);
     });
-    
+    Route::group(['prefix' => '/shopping-list'], function($router) {
+        Route::post('/', [\App\Http\Controllers\Api\ShoppingListController::class, 'store']);
+        Route::get('/list/{userId}', [\App\Http\Controllers\Api\ShoppingListController::class, 'getList']);
+        Route::get('/{id}', [\App\Http\Controllers\Api\ShoppingListController::class, 'index']);
+        Route::put('/{id}', [\App\Http\Controllers\Api\ShoppingListController::class, 'update']);
+        Route::delete('/{id}', [\App\Http\Controllers\Api\ShoppingListController::class, 'delete']);
+    });
 });

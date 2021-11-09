@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Models\ShoppingList;
 
-class ProductController extends Controller
+class ShoppingListController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -19,21 +17,24 @@ class ProductController extends Controller
     {
         try{
             $validateData = Validator::make($request->all(), [
-                'user_id' => 'required|integer|exists:users,id',
-                'mark_id' => 'required|integer|exists:marks,id',
-                'name' => 'required|string',
-                'current_amount' => 'required|integer',
-                'ideal_amount' => 'required|integer',
+                '*.user_id' => 'required|integer|exists:users,id',
+                '*.mark_id' => 'required|integer|exists:marks,id',
+                '*.product_id' => 'required|integer|exists:marks,id',
+                '*.list_name' => 'required|string',
+                '*.mark_name' => 'required|string',
+                '*.product_name' => 'required|string',
+                '*.supermarket' => 'required|string',
+                '*.amount' => 'required|integer',
             ]);
             if($validateData->fails()){
                 return response()->json($validateData->errors(), 403);
             }
-            $newProduct = new Product();
+            $newShoppingList = new ShoppingList();
             foreach (array_keys($request->all()) as $key => $value) {
                 $newProduct->$value =  $request[$value];
             }
             $newProduct->save();
-            return response()->json(['message' => 'Success operation', 'data' => $newProduct], 201);
+            return response()->json(['message' => 'Success operation', 'data' => $newShoppingList], 201);
         }
         catch (\Exception $e){
             return response()->json(['message' => $e->getMessage()], 401);
@@ -44,13 +45,13 @@ class ProductController extends Controller
     {
         try{
             $validateData = Validator::make(['id' => $id],[
-                'id' => 'required|integer|exists:product,id'
+                'id' => 'required|integer|exists:shopping_list,id'
             ]);
             if($validateData->fails()){
                 return response()->json($validateData->errors(), 403);
             }
-            $products = Product::find($id)->first();
-            return response()->json(['message' => 'Success operation', 'data' => $products], 201);
+            $shoppingList = ShoppingList::find($id)->first();
+            return response()->json(['message' => 'Success operation', 'data' => $shoppingList], 201);
         }catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 401);
         }
@@ -65,7 +66,7 @@ class ProductController extends Controller
             if ($validateData->fails()) {
                 return response()->json($validateData->errors(), 403);
             }
-            $list = Product::where('user_id', '=', $userId)->get();
+            $list = ShoppingList::where('user_id', '=', $userId)->get();
             return response()->json(['message' => 'Success operation', 'data' => $list], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 401);
@@ -76,16 +77,18 @@ class ProductController extends Controller
     {
         try {
             $validateData = Validator::make($request->all(), [
-                'name' => 'required|string',
-                'current_amount' => 'required|integer',
-                'ideal_amount' => 'required|integer',
+                '*.list_name' => 'required|string',
+                '*.mark_name' => 'required|string',
+                '*.product_name' => 'required|string',
+                '*.supermarket' => 'required|string',
+                '*.amount' => 'required|integer',
             ]);
             if ($validateData->fails()) {
                 return response()->json($validateData->errors(), 403);
             }
-            Product::where('id', '=', $id)->update($request->all());
-            $productUpdate = Product::findOrFail($id);
-            return response()->json(['message' => 'Success operation', 'data' => $productUpdate], 201);
+            ShoppingList::where('id', '=', $id)->update($request->all());
+            $shoppingListUpdate = ShoppingList::findOrFail($id);
+            return response()->json(['message' => 'Success operation', 'data' => $shoppingListUpdate], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 401);
         }
@@ -95,12 +98,12 @@ class ProductController extends Controller
     {
         try {
             $validateData = Validator::make(['id' => $id], [
-                'id' => 'required|integer|exists:product,id'
+                'id' => 'required|integer|exists:shopping_list,id'
             ]);
             if ($validateData->fails()) {
                 return response()->json($validateData->errors(), 403);
             }
-            Product::where('id', '=', $id)->delete();
+            ShoppingList::where('id', '=', $id)->delete();
             return response()->json(['message' => 'Success operation', 'data' => 'OK'], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 401);
