@@ -34,6 +34,5 @@ Comando: php artisan migrate
 ## 6. Se debe correr el proyecto
 Comando: php artisan serve
 
-<img width="580" alt="Screen Shot 2022-04-29 at 1 27 22 AM" src="https://user-images.githubusercontent.com/84257795/165898136-cacbcfe3-caa2-43fe-a95b-7f5c296c639f.png">
 
 Este comando les dara un url, normalmente es http://127.0.0.1:8000, si es diferente se necerio que vayan al archivo llamado [urlRequest] del frontend, debe remplazarla por la que le sale
