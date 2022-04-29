@@ -13,11 +13,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group([
-    'middleware' => 'api',
-    'prefix' => '/auth'
-
-], function ($router) {
+Route::group(['prefix' => '/auth'], function ($router) {
     Route::post('login', [\App\Http\Controllers\Api\AuthController::class, 'login'])->name('login');
     Route::post('register', [\App\Http\Controllers\Api\AuthController::class, 'register'])->name('register');
     Route::get('resetPassword/{email}', [\App\Http\Controllers\Api\AuthController::class, 'resetPassword'])->name('resetPassword');
@@ -25,19 +21,13 @@ Route::group([
     Route::post('logout', [\App\Http\Controllers\Api\AuthController::class, 'logout'])->name('logout');
     Route::post('refresh', [\App\Http\Controllers\Api\AuthController::class, 'refresh'])->name('refresh');
     Route::post('me', [\App\Http\Controllers\Api\AuthController::class, 'me'])->name('me');
-    Route::group(['prefix' => '/mark'], function($router) {
-        Route::post('/', [\App\Http\Controllers\Api\MarkController::class, 'newMark']);
-        Route::get('list/{userId}', [\App\Http\Controllers\Api\MarkController::class, 'getListMark']);
-        Route::get('{id}', [\App\Http\Controllers\Api\MarkController::class, 'getMark']);
-        Route::put('{id}', [\App\Http\Controllers\Api\MarkController::class, 'editMark']);
-        Route::delete('{id}', [\App\Http\Controllers\Api\MarkController::class, 'deleteMark']);
-    });
+
     Route::group(['prefix' => '/product'], function($router) {
         Route::post('/', [\App\Http\Controllers\Api\ProductController::class, 'store']);
-        Route::get('/list/{userId}', [\App\Http\Controllers\Api\ProductController::class, 'getList']);
+        Route::get('/list', [\App\Http\Controllers\Api\ProductController::class, 'getList']);
         Route::get('/{id}', [\App\Http\Controllers\Api\ProductController::class, 'index']);
-        Route::put('/{id}', [\App\Http\Controllers\Api\ProductController::class, 'update']);
-        Route::delete('/{id}', [\App\Http\Controllers\Api\ProductController::class, 'delete']);
+        Route::put('/update/{id}', [\App\Http\Controllers\Api\ProductController::class, 'update']);
+        Route::delete('/delete/{id}', [\App\Http\Controllers\Api\ProductController::class, 'delete']);
     });
     Route::group(['prefix' => '/shopping-list'], function($router) {
         Route::post('/', [\App\Http\Controllers\Api\ShoppingListController::class, 'store']);
